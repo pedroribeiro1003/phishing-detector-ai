@@ -47,10 +47,6 @@
       font-size: 26px;
       font-weight: bold;
     }
-
-    .loading {
-      color: #facc15;
-    }
   </style>
 </head>
 
@@ -64,7 +60,6 @@
   <div id="resultado"></div>
 
   <script>
-      <script>
     async function verificar() {
       const url = document.getElementById("url").value;
       const resultado = document.getElementById("resultado");
@@ -78,7 +73,7 @@
       resultado.innerHTML = "🔍 Analisando...";
 
       try {
-        const response = await fetch(window.location.origin + "/predict", {
+        const response = await fetch("/predict", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -104,7 +99,6 @@
         resultado.style.color = "orange";
       }
     }
-  </script>
   </script>
 
 </body>
