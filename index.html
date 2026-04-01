@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Detector de Phishing 🔐</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+      margin-top: 100px;
+    }
+
+    input {
+      padding: 12px;
+      width: 300px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #22c55e;
+      color: white;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    #resultado {
+      margin-top: 30px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔐 Detector de Phishing</h1>
+
+  <input type="text" id="url" placeholder="Cole a URL aqui">
+  <button onclick="verificar()">Verificar</button>
+
+  <div id="resultado"></div>
+
+  <!-- AQUI ESTÁ O JS -->
+  <script>
+    async function verificar() {
+      const url = document.getElementById("url").value;
+
+      const resultado = document.getElementById("resultado");
+
+      try {
+        const response = await fetch("http://127.0.0.1:5000/predict", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ url: url })
+        });
+
+        const data = await response.json();
+
+        if (data.resultado === "Phishing") {
+          resultado.innerHTML = "⚠️ Phishing";
+          resultado.style.color = "red";
+        } else {
+          resultado.innerHTML = "✅ Seguro";
+          resultado.style.color = "lightgreen";
+        }
+
+      } catch (error) {
+        console.error(error);
+        resultado.innerHTML = "Erro ao conectar com a API";
+        resultado.style.color = "orange";
+      }
+    }
+  </script>
+
+</body>
+</html>
