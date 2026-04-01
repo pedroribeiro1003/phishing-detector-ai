@@ -64,6 +64,7 @@
   <div id="resultado"></div>
 
   <script>
+      <script>
     async function verificar() {
       const url = document.getElementById("url").value;
       const resultado = document.getElementById("resultado");
@@ -75,10 +76,9 @@
       }
 
       resultado.innerHTML = "🔍 Analisando...";
-      resultado.className = "loading";
 
       try {
-        const response = await fetch("/predict", {
+        const response = await fetch(window.location.origin + "/predict", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -87,6 +87,8 @@
         });
 
         const data = await response.json();
+
+        console.log("Resposta:", data);
 
         if (data.resultado === "Phishing") {
           resultado.innerHTML = "⚠️ Phishing detectado";
@@ -97,11 +99,12 @@
         }
 
       } catch (error) {
-        console.error(error);
+        console.error("Erro fetch:", error);
         resultado.innerHTML = "❌ Erro ao conectar com a API";
         resultado.style.color = "orange";
       }
     }
+  </script>
   </script>
 
 </body>
