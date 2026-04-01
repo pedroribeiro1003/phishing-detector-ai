@@ -3,39 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <title>Detector de Phishing 🔐</title>
+
   <style>
     body {
       font-family: Arial;
-      background: #0f172a;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
       color: white;
       text-align: center;
-      margin-top: 100px;
+      margin-top: 120px;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 30px;
     }
 
     input {
-      padding: 12px;
-      width: 300px;
-      border-radius: 8px;
+      padding: 14px;
+      width: 320px;
+      border-radius: 10px;
       border: none;
+      font-size: 14px;
     }
 
     button {
-      padding: 12px 20px;
+      padding: 14px 22px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       background: #22c55e;
       color: white;
       cursor: pointer;
       margin-left: 10px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #16a34a;
     }
 
     #resultado {
       margin-top: 30px;
-      font-size: 24px;
+      font-size: 26px;
       font-weight: bold;
+    }
+
+    .loading {
+      color: #facc15;
     }
   </style>
 </head>
+
 <body>
 
   <h1>🔐 Detector de Phishing</h1>
@@ -45,15 +63,22 @@
 
   <div id="resultado"></div>
 
-  <!-- AQUI ESTÁ O JS -->
   <script>
     async function verificar() {
       const url = document.getElementById("url").value;
-
       const resultado = document.getElementById("resultado");
 
+      if (!url) {
+        resultado.innerHTML = "⚠️ Digite uma URL";
+        resultado.style.color = "orange";
+        return;
+      }
+
+      resultado.innerHTML = "🔍 Analisando...";
+      resultado.className = "loading";
+
       try {
-        const response = await fetch("http://127.0.0.1:5000/predict", {
+        const response = await fetch("/predict", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -64,16 +89,16 @@
         const data = await response.json();
 
         if (data.resultado === "Phishing") {
-          resultado.innerHTML = "⚠️ Phishing";
+          resultado.innerHTML = "⚠️ Phishing detectado";
           resultado.style.color = "red";
         } else {
-          resultado.innerHTML = "✅ Seguro";
+          resultado.innerHTML = "✅ Site seguro";
           resultado.style.color = "lightgreen";
         }
 
       } catch (error) {
         console.error(error);
-        resultado.innerHTML = "Erro ao conectar com a API";
+        resultado.innerHTML = "❌ Erro ao conectar com a API";
         resultado.style.color = "orange";
       }
     }
